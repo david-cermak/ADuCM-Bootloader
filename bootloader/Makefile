@@ -23,7 +23,7 @@ all: $(TARGET_NAME).elf $(TARGET_NAME).hex
 $(TARGET_NAME).elf: $(OBJECTS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU ARM Cross C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m3 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -T ld/mem.ld -T ld/sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"adtest.map" --specs=nano.specs -o "$(TARGET_NAME).elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m3 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -T ld/mem.ld -T ld/sections.ld -nostartfiles -Xlinker --gc-sections -L"../ldscripts" -Wl,-Map,"adtest.map" --specs=nano.specs -o "$(TARGET_NAME).elf" $(OBJECTS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

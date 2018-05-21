@@ -23,7 +23,7 @@ void write_to_flash(uint32_t page, uint32_t size)
 		// not writing to INIT_VECTOR
 		if (address == (uint32_t*)INIT_VECTOR) {
 			// _start of bootloader
-			value_to_write = 0x01E115;  // TODO: replace hardcoded value
+			value_to_write = 0x0001e005;  // TODO: replace hardcoded value
 		} else {
 			value_to_write = *array;
 		}
