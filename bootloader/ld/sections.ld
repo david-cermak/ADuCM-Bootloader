@@ -57,6 +57,20 @@ SECTIONS
      * For Cortex-M devices, the beginning of the startup code is stored in
      * the .isr_vector section, which goes to FLASH. 
      */
+	.app_desc : ALIGN(4)
+    {
+        FILL(0xFF)
+        
+        KEEP(*(.app_desc))     	/* Interrupt vectors */
+    } >FLASH_DES
+         
+	.jmp_table : ALIGN(4)
+    {
+        FILL(0xFF)
+        
+        KEEP(*(.jmp_table))     	/* Interrupt vectors */
+    } >FLASH_JMP
+    
     .isr_vector : ALIGN(4)
     {
         FILL(0xFF)
@@ -72,8 +86,9 @@ SECTIONS
          * startup code at the beginning of the flash area, hoping that
          * this will increase the readability of the listing.
          */
+        *(.after_vectors .after_vectors.*)	/* Startup code and ISR */
 
-    } >FLASH_VEC
+    } >FLASH
 
     .inits : ALIGN(4)
     {
@@ -96,9 +111,7 @@ SECTIONS
          * WARNING: It is mandatory that the regions are word aligned, 
          * since the initialisation code works only on words.
          */
-
-        *(.after_vectors .after_vectors.*)	/* Startup code and ISR */
-         
+        
         __data_regions_array_start = .;
 
         

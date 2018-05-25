@@ -67,15 +67,9 @@ SECTIONS
         
 		KEEP(*(.cfmconfig))			/* Freescale configuration words */   
 		     
-        /* 
-         * This section is here for convenience, to store the
-         * startup code at the beginning of the flash area, hoping that
-         * this will increase the readability of the listing.
-         */
-        *(.after_vectors .after_vectors.*)	/* Startup code and ISR */
          
 
-    } >FLASH
+    } >FLASH_VEC
 
     .inits : ALIGN(4)
     {
@@ -100,6 +94,10 @@ SECTIONS
          */
                   
         __data_regions_array_start = .;
+        
+		KEEP(*(.jmp_table))     	/* Common jump table */
+
+        *(.after_vectors .after_vectors.*)	/* Startup code and ISR */
         
         LONG(LOADADDR(.data));
         LONG(ADDR(.data));

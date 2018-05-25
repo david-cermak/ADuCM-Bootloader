@@ -2,7 +2,7 @@ SRCS += system/src/aducm360/DioLib.c  \
 		system/src/aducm360/FeeLib.c \
 		system/src/aducm360/UrtLib.c \
 		system/src/cmsis/system_ADuCM360.c \
-		system/src/cmsis/vectors_ADuCM360.c \
+		system/src/cmsis/boot_vectors.c \
 		system/src/cortexm/_initialize_hardware.c \
 		system/src/cortexm/_reset_hardware.c \
 		system/src/cortexm/exception_handlers.c \

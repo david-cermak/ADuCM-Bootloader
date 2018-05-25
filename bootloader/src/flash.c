@@ -10,7 +10,6 @@ void write_to_flash(uint32_t page, uint32_t size)
 	uint32_t *array = &g_prg_data[1];
 	volatile uint32_t *address = (uint32_t*)page;
 	uint32_t i = 0;
-	uint32_t  value_to_write;
 
 	// wait till previous operation finished
 	while (pADI_FEE->FEESTA  == 1) {}
@@ -20,17 +19,24 @@ void write_to_flash(uint32_t page, uint32_t size)
 
 
 	for (i = 0; i < size; i+=4) {
-		// not writing to INIT_VECTOR
-		if (address == (uint32_t*)INIT_VECTOR) {
-			// _start of bootloader
-			value_to_write = 0x0001e005;  // TODO: replace hardcoded value
-		} else {
-			value_to_write = *array;
+		// not writing to bootloader
+		if (address >= (uint32_t*)0x1000)
+		{
+			*address  = *array; // actual write
+			// waiting till finished
+			while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
+		} else if (address == (uint32_t*)0x0004)
+		{
+			// this is init vector, let's write app descriptors
+			FeePErs(0xE00);
+			while (pADI_FEE->FEESTA  == 1) {}
+			*((uint32_t*)0xE00) = 0xBEA70001; // magic id
+			while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
+			*((uint32_t*)0xE04) = *array;     // program start
+			while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
+			// TODO: program end & checksum
 		}
 
-		*address  = value_to_write; // actual write
-		// waiting till finished
-		while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
 		address++;
 		array++;
 	}
@@ -41,6 +47,9 @@ void write_to_flash(uint32_t page, uint32_t size)
 
 void erase_pages(int address, int pages)
 {
+	// not rewriting bootcode
+	if (address < 0x1000) return;
+
 	int i;
 	for (i=0; i<pages; i++)
 	{

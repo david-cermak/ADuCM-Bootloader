@@ -5,32 +5,37 @@
 
 extern uint32_t g_prg_data[];
 
+#define GETC_TIMEOUT(c) if (!receive(&c, proto_timeout)) { \
+	break; \
+}
+
 void start()
 {
 	int cont = 1;
+	const int proto_timeout = 0x50000;
 	int i = 0;
 	uint8_t *data = (uint8_t*)g_prg_data;
 	while (cont) {
+	  char ch;
 	  // Start the protocol
-	  // TODO: Add timeout to restart protocol (if communication interrupted)
-	  while (0 ==(pADI_UART->COMLSR&1)) {}
-	  if (0x07 == UrtRx(pADI_UART)) {
-		  while (0 ==(pADI_UART->COMLSR&1)) {}
-		  if (0x0E == UrtRx(pADI_UART)) {
-			  while (0 ==(pADI_UART->COMLSR&1)) {}
-			  int bytes = UrtRx(pADI_UART);
+	  GETC_TIMEOUT(ch);
+	  if (0x07 == ch) {
+		  GETC_TIMEOUT(ch);
+		  if (0x0E == ch) {
+			  GETC_TIMEOUT(ch);
+			  int bytes = ch;
 			  if (bytes >= 5) {
 				  int cs = bytes;
-				  while (0 ==(pADI_UART->COMLSR&1)) {}
-				  int command = UrtRx(pADI_UART);
+				  GETC_TIMEOUT(ch);
+				  int command = ch;
 				  cs += command;
 				  for (i=0; i < bytes-1; i++) {
-					  while (0 ==(pADI_UART->COMLSR&1)) {}
-					  data[i] = UrtRx(pADI_UART);
+					  GETC_TIMEOUT(ch);
+					  data[i] = ch;
 					  cs += data[i];
 				  }
-				  while (0 ==(pADI_UART->COMLSR&1)) {}
-				  int received_cs = UrtRx(pADI_UART);
+				  GETC_TIMEOUT(ch);
+				  int received_cs = ch;
 				  if ((0xFF&(cs+received_cs)) == 0)
 				  {
 					  // Received valid
