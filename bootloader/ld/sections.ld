@@ -228,6 +228,8 @@ SECTIONS
 		 */
         *(.glue_7)
         *(.glue_7t)
+        __flash_end = .;
+
 
     } >FLASH
 

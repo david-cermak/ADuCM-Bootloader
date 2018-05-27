@@ -22,9 +22,19 @@ void write_to_flash(uint32_t page, uint32_t size)
 		// not writing to bootloader
 		if (address >= (uint32_t*)0x1000)
 		{
-			*address  = *array; // actual write
-			// waiting till finished
-			while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
+			if ((address >= (uint32_t*)0x1110)&&(address <= (uint32_t*)0x1F10) )
+			{
+				*address  = (*array); // actual write
+				// waiting till finished
+				while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
+			}
+			else
+			{
+				*address  = *array; // actual write
+				// waiting till finished
+				while ((pADI_FEE->FEESTA & 0x8) == 0x0) {}
+
+			}
 		} else if (address == (uint32_t*)0x0004)
 		{
 			// this is init vector, let's write app descriptors

@@ -36,6 +36,7 @@ int main()
 
 	  // initial check with timeout to start app
 	  if (!receive(&ch, default_timeout)) {
+		  ch = '\0';
 		  start_application();
 	  } else if (ch == 0x40) { // character to stay in bootloader (a bit longer)
 		  default_timeout = 0x5000000;
@@ -44,7 +45,7 @@ int main()
 	  // waiting for backspace
 	  if (ch == 0x08) {
 		  // bootstrapping activated -- sending identifier
-		  for (i = 0; i< 24; i++) {
+		  for (i = 0; i< 21; i++) {
 			  UrtTx(pADI_UART, id_packet[i]);
 			  while (0 == (pADI_UART->COMLSR&0x20)) {}
 		  }
