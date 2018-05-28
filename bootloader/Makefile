@@ -7,7 +7,7 @@ include system/deps.mk
 SECONDARY_FLASH += $(TARGET_NAME).hex
 
 FLASH_INFO = system/src/cmsis/boot_vectors
-SRCS += src/main.c src/flash.c src/app.c src/protocol.c
+SRCS += src/main.c src/flash.c src/app.c src/protocol.c src/serial.c
 OBJECTS += $(SRCS:.c=.o)
 $(info $(OBJECTS))
 
