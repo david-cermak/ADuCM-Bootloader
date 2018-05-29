@@ -3,6 +3,8 @@
 #include "DioLib.h"
 #include "string.h"
 
+#define ADUCINO_UART
+
 #ifdef ADUCINO_UART
 #define SET_DIRECTION_TX()
 #define SET_DIRECTION_RX()

@@ -255,4 +255,19 @@ struct jumpTable __jmp_table[] = {
 		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
 };
 
+#define MAGIC_ID   0xBEA70000 /* Make this record invalid  */
+#define APP_START  0x1000
+#ifndef APP_END
+#define APP_END 0x0000211f
+#warning Please recompile again with valid APP_END
+#endif
+
+
+__attribute__ ((section(".app_desc")))
+uint32_t application_descriptors[] = {
+ MAGIC_ID,
+ APP_START,
+ APP_END,
+};
+
 // ----------------------------------------------------------------------------

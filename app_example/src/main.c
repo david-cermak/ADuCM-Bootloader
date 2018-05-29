@@ -33,6 +33,15 @@
 #include "DioLib.h"
 #include "core_cm3.h"
 
+#include "cmsis_device.h"
+
+// ----------------------------------------------------------------------------
+
+#define TIMER_FREQUENCY_HZ (1000u)
+
+typedef uint32_t timer_ticks_t;
+
+extern volatile timer_ticks_t timer_delayCount;
 // ----------------------------------------------------------------------------
 //
 // Standalone $(shortChipFamily) empty sample (trace via NONE).
@@ -44,6 +53,55 @@
 // (currently OS_USE_TRACE_ITM, OS_USE_TRACE_SEMIHOSTING_DEBUG/_STDOUT).
 //
 
+void
+timer_tick (void);
+
+// ----------------------------------------------------------------------------
+
+volatile timer_ticks_t timer_delayCount;
+
+// ----------------------------------------------------------------------------
+
+void
+timer_start (void)
+{
+  // Use SysTick as reference for the delay loops.
+  SysTick_Config (SystemCoreClock / TIMER_FREQUENCY_HZ);
+}
+
+void
+timer_sleep (timer_ticks_t ticks)
+{
+  timer_delayCount = ticks;
+
+  // Busy wait until the SysTick decrements the counter to zero.
+  while (timer_delayCount != 0u)
+    ;
+}
+
+void
+timer_tick (void)
+{
+  // Decrement to zero the counter used by the delay routine.
+	if (timer_delayCount != 0u)
+	{
+		--timer_delayCount;
+	}
+	else
+	{
+		UrtTx(pADI_UART, '\n');
+		timer_delayCount = TIMER_FREQUENCY_HZ;
+	}
+}
+
+// ----- SysTick_Handler() ----------------------------------------------------
+
+void
+SysTick_Handler (void)
+{
+  timer_tick ();
+}
+
 // ----- main() ---------------------------------------------------------------
 
 int
@@ -51,6 +109,7 @@ main()
 {
 	  DioCfg(pADI_GP0, 0x003C);
 	  UrtCfg(pADI_UART, B9600, 3, 0);
+	  timer_start ();
 
   // Infinite loop
   while (1)

@@ -115,9 +115,10 @@ enum e_process_command process_command(int bytes, int command, uint8_t* data)
 		{
 			g_last_word = data[4] + (data[5]<<8) + (data[6]<<16) +  (data[7]<<24);
 		}
-		else if (address == 0)
+		else if (address < 0x1000)
 		{
 			// pretend verify OK
+			cmd_out = eContinue;
 		}
 		else
 		{

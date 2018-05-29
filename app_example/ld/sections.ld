@@ -53,6 +53,13 @@ ENTRY(_start)
 
 SECTIONS
 {
+	.app_desc : ALIGN(4)
+    {
+        FILL(0xFF)
+        
+        KEEP(*(.app_desc))     	/* Interrupt vectors */
+    } >FLASH_DES
+    
     /*
      * For Cortex-M devices, the beginning of the startup code is stored in
      * the .isr_vector section, which goes to FLASH. 
@@ -212,6 +219,8 @@ SECTIONS
 		 */
         *(.glue_7)
         *(.glue_7t)
+        __flash_end = .;
+        
 
     } >FLASH
 

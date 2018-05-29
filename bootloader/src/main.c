@@ -24,6 +24,8 @@ int main()
 	char *id_packet = "ADuCM360   128 XXX \n\r"; // Info packet
 	int default_timeout = 0x500000;
 
+	SerialInit();
+
 	while (1) {
 	  char ch;
 
