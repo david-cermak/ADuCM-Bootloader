@@ -13,7 +13,47 @@ struct jumpTable
 	pHandler           handler_1;
 };
 
+void __attribute__((weak))
+Default_Handler(void);
 
+void __attribute__ ((weak, alias ("Default_Handler"))) WakeUp_Int_Handler(void);        //[ 0]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int0_Handler(void);          //[ 1]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int1_Handler(void);          //[ 2]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int2_Handler(void);          //[ 3]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int3_Handler(void);          //[ 4]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int4_Handler(void);          //[ 5]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int5_Handler(void);          //[ 6]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int6_Handler(void);          //[ 7]
+void __attribute__ ((weak, alias ("Default_Handler"))) Ext_Int7_Handler(void);          //[ 8]
+void __attribute__ ((weak, alias ("Default_Handler"))) WDog_Tmr_Int_Handler(void);      //[ 9]
+void __attribute__ ((weak, alias ("Default_Handler"))) GP_Tmr0_Int_Handler(void);       //[11]
+void __attribute__ ((weak, alias ("Default_Handler"))) GP_Tmr1_Int_Handler(void);       //[12]
+void __attribute__ ((weak, alias ("Default_Handler"))) ADC0_Int_Handler(void);          //[13]
+void __attribute__ ((weak, alias ("Default_Handler"))) ADC1_Int_Handler(void);          //[14]
+void __attribute__ ((weak, alias ("Default_Handler"))) SINC2_Int_Handler(void);         //[15]
+void __attribute__ ((weak, alias ("Default_Handler"))) Flsh_Int_Handler(void);          //[16]
+void __attribute__ ((weak, alias ("Default_Handler"))) UART_Int_Handler(void);          //[17]
+void __attribute__ ((weak, alias ("Default_Handler"))) SPI0_Int_Handler(void);          //[18]
+void __attribute__ ((weak, alias ("Default_Handler"))) SPI1_Int_Handler(void);          //[19]
+void __attribute__ ((weak, alias ("Default_Handler"))) I2C0_Slave_Int_Handler(void);    //[20]
+void __attribute__ ((weak, alias ("Default_Handler"))) I2C0_Master_Int_Handler(void);   //[21]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_Err_Int_Handler(void);       //[22]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_SPI1_TX_Int_Handler(void);   //[23]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_SPI1_RX_Int_Handler(void);   //[24]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_UART_TX_Int_Handler(void);   //[25]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_UART_RX_Int_Handler(void);   //[26]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_I2C0_STX_Int_Handler(void);  //[27]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_I2C0_SRX_Int_Handler(void);  //[28]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_I2C0_MTX_Int_Handler(void);  //[29]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_I2C0_MRX_Int_Handler(void);  //[30]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_DAC_Out_Int_Handler(void);   //[31]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_ADC0_Int_Handler(void);      //[32]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_ADC1_Int_Handler(void);      //[33]
+void __attribute__ ((weak, alias ("Default_Handler"))) DMA_SINC2_Int_Handler(void);     //[34]
+void __attribute__ ((weak, alias ("Default_Handler"))) PWMTRIP_Int_Handler(void);       //[35]
+void __attribute__ ((weak, alias ("Default_Handler"))) PWM0_Int_Handler(void);          //[36]
+void __attribute__ ((weak, alias ("Default_Handler"))) PWM1_Int_Handler(void);          //[37]
+void __attribute__ ((weak, alias ("Default_Handler"))) PWM2_Int_Handler(void);          //[38]
 // Define common jump table locations (vectors shared for all applications)
 
 #define COMMON_JUMP_TABLE  0x001001
@@ -142,23 +182,30 @@ Default_Handler(void)
 
 __attribute__ ((section(".jmp_table")))
 struct jumpTable __jmp_table[] = {
-		{ 0x47004801, 0x47004801, Reset_Handler, NMI_Handler},
-		{ 0x47004801, 0x47004801, HardFault_Handler, MemManage_Handler},
-		{ 0x47004801, 0x47004801, BusFault_Handler, UsageFault_Handler},
-		{ 0x47004801, 0x47004801, SVC_Handler, DebugMon_Handler},
-		{ 0x47004801, 0x47004801, PendSV_Handler, SysTick_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
-		{ 0x47004801, 0x47004801, Reset_Handler, Reset_Handler},
+		{ LOAD_PC, LOAD_PC, Reset_Handler, NMI_Handler},
+		{ LOAD_PC, LOAD_PC, HardFault_Handler, MemManage_Handler},
+		{ LOAD_PC, LOAD_PC, BusFault_Handler, UsageFault_Handler},
+		{ LOAD_PC, LOAD_PC, SVC_Handler, DebugMon_Handler},
+		{ LOAD_PC, LOAD_PC, PendSV_Handler, SysTick_Handler},
+		{ LOAD_PC, LOAD_PC, WakeUp_Int_Handler, Ext_Int0_Handler},
+		{ LOAD_PC, LOAD_PC, Ext_Int1_Handler, Ext_Int2_Handler},
+		{ LOAD_PC, LOAD_PC, Ext_Int3_Handler, Ext_Int4_Handler},
+		{ LOAD_PC, LOAD_PC, Ext_Int5_Handler, Ext_Int6_Handler},
+		{ LOAD_PC, LOAD_PC, Ext_Int7_Handler, WDog_Tmr_Int_Handler},
+		{ LOAD_PC, LOAD_PC, GP_Tmr0_Int_Handler, GP_Tmr1_Int_Handler},
+		{ LOAD_PC, LOAD_PC, ADC0_Int_Handler, ADC1_Int_Handler},
+		{ LOAD_PC, LOAD_PC, SINC2_Int_Handler, Flsh_Int_Handler},
+		{ LOAD_PC, LOAD_PC, UART_Int_Handler, SPI0_Int_Handler},
+		{ LOAD_PC, LOAD_PC, SPI1_Int_Handler, I2C0_Slave_Int_Handler},
+		{ LOAD_PC, LOAD_PC, I2C0_Master_Int_Handler, DMA_Err_Int_Handler},
+		{ LOAD_PC, LOAD_PC, DMA_SPI1_TX_Int_Handler, DMA_SPI1_RX_Int_Handler},
+		{ LOAD_PC, LOAD_PC, DMA_UART_TX_Int_Handler, DMA_UART_RX_Int_Handler},
+		{ LOAD_PC, LOAD_PC, DMA_I2C0_STX_Int_Handler, DMA_I2C0_SRX_Int_Handler},
+		{ LOAD_PC, LOAD_PC, DMA_I2C0_MTX_Int_Handler, DMA_I2C0_MRX_Int_Handler},
+		{ LOAD_PC, LOAD_PC, DMA_DAC_Out_Int_Handler, DMA_ADC0_Int_Handler},
+		{ LOAD_PC, LOAD_PC, DMA_ADC1_Int_Handler, DMA_SINC2_Int_Handler},
+		{ LOAD_PC, LOAD_PC, PWMTRIP_Int_Handler, PWM0_Int_Handler},
+		{ LOAD_PC, LOAD_PC, PWM1_Int_Handler, PWM2_Int_Handler},
 };
 
 #define MAGIC_ID   0xBEA70000 /* Make this record invalid  */

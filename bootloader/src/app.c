@@ -10,13 +10,9 @@
 
 void start_application()
 {
-	// small test if the app look correct
-
+	// small test if the app looks correct
 	if ( MAGIC_ID == 0xBEA70001)
 	{
-//		int app_start = *((uint32_t*)BASE_ADDR+4);
 		((void(*)())(START_APP))();
-//		asm("ldr     r0, [0xE04]");
-//		asm("bx       r0");
 	}
 }

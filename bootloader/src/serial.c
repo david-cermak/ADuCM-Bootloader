@@ -3,7 +3,7 @@
 #include "DioLib.h"
 #include "string.h"
 
-#define ADUCINO_UART
+//#define ADUCINO_UART
 
 #ifdef ADUCINO_UART
 #define SET_DIRECTION_TX()
@@ -25,7 +25,8 @@ void SerialInit()
 	DioCfg(pADI_GP0, 0x8000 | 0x1000); // P0.6 & P0.7
 	DioOen(pADI_GP0, PIN5);
 #endif
-	UrtCfg(pADI_UART, B9600, 3, 0);
+//	UrtCfg(pADI_UART, B9600, 3, 0);
+	UrtCfg(pADI_UART, B115200, 3, 0);
 
 }
 
