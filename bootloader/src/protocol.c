@@ -44,7 +44,7 @@ void start()
 		  GETC_TIMEOUT(ch);
 		  if (0x0E == ch) {
 			  GETC_TIMEOUT(ch);
-			  int bytes = ch;
+			  uint32_t bytes = (unsigned char)ch;
 			  if (bytes >= 5) {
 				  int cs = bytes;
 				  GETC_TIMEOUT(ch);
