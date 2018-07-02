@@ -6,6 +6,8 @@
 
 extern uint32_t g_prg_data[];
 
+#define MY_UART    pADI_UART1
+
 #define GETC_TIMEOUT(c) \
 	if (!receive(&c, proto_timeout)) { \
 		cont = 0; \
@@ -83,13 +85,13 @@ void start()
 int receive(char* ch, int timeout)
 {
 	uint32_t cnt = timeout;
-	while (0 ==(pADI_UART->COMLSR&1) && cnt) {
+	while (0 ==(MY_UART->COMLSR&1) && cnt) {
 		cnt--;
 	}
 	if (0 == cnt) {
 		return 0;
 	}
-	*ch = UrtRx(pADI_UART);
+	*ch = UrtRx(MY_UART);
 	return 1;
 }
 

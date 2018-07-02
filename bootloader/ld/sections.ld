@@ -18,7 +18,7 @@ _estack = __stack; 	/* STM specific definition */
  * for the different modes.
  */
 
-__Main_Stack_Size = 1024 ;
+__Main_Stack_Size = 2048 ;
 
 PROVIDE ( _Main_Stack_Size = __Main_Stack_Size ) ;
 
@@ -57,13 +57,14 @@ SECTIONS
      * For Cortex-M devices, the beginning of the startup code is stored in
      * the .isr_vector section, which goes to FLASH. 
      */
+     
 	.app_desc : ALIGN(4)
     {
         FILL(0xFF)
         
-        KEEP(*(.app_desc))     	/* Interrupt vectors */
+        KEEP(*(.app_desc))
     } >FLASH_DES
-         
+      
 	.jmp_table : ALIGN(4)
     {
         FILL(0xFF)

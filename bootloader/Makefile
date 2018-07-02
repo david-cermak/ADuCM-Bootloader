@@ -24,12 +24,12 @@ clean_map:
 .PHONY: recompile_$(FLASH_INFO).o
 recompile_$(FLASH_INFO).o:
 	@echo 'CC $(FLASH_INFO).c'
-	@arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DDEBUG -DTRACE -DOS_USE_TRACE_SEMIHOSTING_DEBUG -DAPP_END=`grep -Po '(0x[0-9a-fA-F]+)(?=\s+__flash_end)' bootloader.map` $(INCS) -std=gnu11 -Wno-missing-prototypes -Wno-padded -Wno-missing-declarations -MMD -MP -c -o "$(FLASH_INFO).o" "$(FLASH_INFO).c"
+	@arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -D__ADUCM362__  -DDEBUG -DAPP_END=`grep -Po '(0x[0-9a-fA-F]+)(?=\s+__flash_end)' bootloader.map` $(INCS) -std=gnu11 -Wno-missing-prototypes -Wno-padded -Wno-missing-declarations -MMD -MP -c -o "$(FLASH_INFO).o" "$(FLASH_INFO).c"
 	# rm -f $(FLASH_INFO).o
 
 %.o: %.c
 	@echo 'CC $<'
-	@arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -DDEBUG -DTRACE -DOS_USE_TRACE_SEMIHOSTING_DEBUG $(INCS) -std=gnu11 -Wno-missing-prototypes -Wno-padded -Wno-missing-declarations -MMD -MP -MF"$(@:%.o=%.d)" -c -o "$@" "$<"
+	@arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -Og -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -fno-move-loop-invariants -Wall -Wextra  -g3 -D__ADUCM362__ -DDEBUG $(INCS) -std=gnu11 -Wno-missing-prototypes -Wno-padded -Wno-missing-declarations -MMD -MP -MF"$(@:%.o=%.d)" -c -o "$@" "$<"
 
 # Tool invocations
 $(TARGET_NAME).map: $(OBJECTS)

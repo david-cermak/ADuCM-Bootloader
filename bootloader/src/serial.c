@@ -5,6 +5,8 @@
 
 //#define ADUCINO_UART
 
+#define MY_UART    pADI_UART1
+
 #ifdef ADUCINO_UART
 #define SET_DIRECTION_TX()
 #define SET_DIRECTION_RX()
@@ -17,6 +19,8 @@
 
 void SerialInit()
 {
+	pADI_CLKCTL->CLKDIS &= ~0x08;
+	pADI_CLKCTL->CLKCON2 &= ~ ( 0x01 | CLKCON2_UART1CD_MSK);
 	//
 	// Init IO & Uart -- needed peripherals, but no interrupts
 #ifdef ADUCINO_UART
@@ -26,8 +30,8 @@ void SerialInit()
 	DioOen(pADI_GP0, 1<<PIN5);
 	SET_DIRECTION_RX();
 #endif
-//	UrtCfg(pADI_UART, B9600, 3, 0);
-	UrtCfg(pADI_UART, B115200, 3, 0);
+//	UrtCfg(MY_UART, B9600, 3, 0);
+	UrtCfg(MY_UART, B115200, 3, 0);
 
 }
 
@@ -37,8 +41,8 @@ void SendSentinels()
 {
 	uint32_t i;
 	for (i = 0; i< strlen(sentinels); i++) {
-		UrtTx(pADI_UART, sentinels[i]);
-		while (0 == (pADI_UART->COMLSR&0x40)) {}
+		UrtTx(MY_UART, sentinels[i]);
+		while (0 == (MY_UART->COMLSR&0x40)) {}
 	}
 }
 
@@ -58,8 +62,8 @@ void SendChar(char ch)
 	SET_DIRECTION_TX();
 	SendSentinels();
 #endif
-	UrtTx(pADI_UART, ch);
-	while (0 == (pADI_UART->COMLSR&0x40)) {}
+	UrtTx(MY_UART, ch);
+	while (0 == (MY_UART->COMLSR&0x40)) {}
 	SET_DIRECTION_RX();
 }
 
@@ -71,8 +75,8 @@ void SendString(char* string)
 	SendSentinels();
 #endif
 	for (i = 0; i< strlen(string); i++) {
-		UrtTx(pADI_UART, string[i]);
-		while (0 == (pADI_UART->COMLSR&0x20)) {}
+		UrtTx(MY_UART, string[i]);
+		while (0 == (MY_UART->COMLSR&0x20)) {}
 	}
 	SET_DIRECTION_RX();
 }
