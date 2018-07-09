@@ -12,7 +12,7 @@ OBJECTS += $(SRCS:.c=.o)
 $(info $(OBJECTS))
 
 # All Target
-all: clean_map $(TARGET_NAME).map $(TARGET_NAME).elf $(TARGET_NAME).hex
+all: clean_map $(TARGET_NAME).map $(TARGET_NAME).elf $(TARGET_NAME).hex $(TARGET_NAME).bin
 
 # clean:
 # 	rm -rf $(OBJECTS).o $(TARGET_NAME).map $(TARGET_NAME).elf $(TARGET_NAME).hex
@@ -45,6 +45,9 @@ $(TARGET_NAME).hex: $(TARGET_NAME).elf
 	arm-none-eabi-objcopy -O ihex "$(TARGET_NAME).elf"  "$(TARGET_NAME).hex"
 	@echo 'Finished building: $@'
 	@echo ' '
+
+$(TARGET_NAME).bin: $(TARGET_NAME).elf
+	arm-none-eabi-objcopy -S -O binary "$(TARGET_NAME).elf"  "$(TARGET_NAME).bin"
 
 clean:
 	-$(RM) $(CC_DEPS)$(C++_DEPS)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(SECONDARY_FLASH)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS)$(CPP_DEPS) $(TARGET_NAME).elf
