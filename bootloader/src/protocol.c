@@ -6,7 +6,11 @@
 
 extern uint32_t g_prg_data[];
 
-#define MY_UART    pADI_UART1
+#ifdef __ADUCM360__
+# define MY_UART    pADI_UART
+#else
+# define MY_UART    pADI_UART1
+#endif /* __ADUCM360__ */
 
 #define GETC_TIMEOUT(c) \
 	if (!receive(&c, proto_timeout)) { \

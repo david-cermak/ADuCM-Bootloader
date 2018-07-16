@@ -4,8 +4,13 @@
 #include "string.h"
 
 //#define ADUCINO_UART
+//#define DISABLE_RS485_SENTINELS
 
-#define MY_UART    pADI_UART1
+#ifdef __ADUCM360__
+# define MY_UART    pADI_UART
+#else
+# define MY_UART    pADI_UART1
+#endif /* __ADUCM360__ */
 
 #ifdef ADUCINO_UART
 #define SET_DIRECTION_TX()
@@ -20,7 +25,11 @@
 void SerialInit()
 {
 	pADI_CLKCTL->CLKDIS &= ~0x08;
+
+#ifndef __ADUCM360__
 	pADI_CLKCTL->CLKCON2 &= ~ ( 0x01 | CLKCON2_UART1CD_MSK);
+#endif
+
 	//
 	// Init IO & Uart -- needed peripherals, but no interrupts
 #ifdef ADUCINO_UART
@@ -39,11 +48,13 @@ char* sentinels = "bl_reps";
 
 void SendSentinels()
 {
+#ifndef DISABLE_RS485_SENTINELS
 	uint32_t i;
 	for (i = 0; i< strlen(sentinels); i++) {
 		UrtTx(MY_UART, sentinels[i]);
 		while (0 == (MY_UART->COMLSR&0x40)) {}
 	}
+#endif
 }
 
 void TinyDelayBeforeDirectionSwitch()
@@ -60,8 +71,8 @@ void SendChar(char ch)
 #ifndef ADUCINO_UART
 	TinyDelayBeforeDirectionSwitch();
 	SET_DIRECTION_TX();
-	SendSentinels();
 #endif
+	SendSentinels();
 	UrtTx(MY_UART, ch);
 	while (0 == (MY_UART->COMLSR&0x40)) {}
 	SET_DIRECTION_RX();
@@ -71,9 +82,8 @@ void SendString(char* string)
 {
 	uint32_t i;
 	SET_DIRECTION_TX();
-#ifndef ADUCINO_UART
 	SendSentinels();
-#endif
+
 	for (i = 0; i< strlen(string); i++) {
 		UrtTx(MY_UART, string[i]);
 		while (0 == (MY_UART->COMLSR&0x20)) {}

@@ -16,7 +16,7 @@ MEMORY
   FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 4K
   FLASH_DES (rx) : ORIGIN = 0x00001000, LENGTH = 1K
   FLASH_JMP (rx) : ORIGIN = 0x00001800, LENGTH = 1K
-  RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 16K 
+  RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 8K
 
   /*
    * Optional sections; define the origin and length to match

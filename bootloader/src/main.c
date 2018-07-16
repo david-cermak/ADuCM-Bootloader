@@ -21,7 +21,11 @@ uint32_t g_prg_data[256/4];
 //
 int main()
 {
+#ifdef __ADUCM360__
 	char *id_packet = "ADuCM360   128 XXX \n\r"; // Info packet
+#else
+	char *id_packet = "ADuCM362   128 XXX \n\r"; // Info packet
+#endif
 	int default_timeout = 0x500000;
 	pADI_GP0->GPCON = (pADI_GP0->GPCON & ~GP0CON_CON1_MSK) | GP0CON_CON1_UARTRXD;
 	pADI_GP0->GPCON = (pADI_GP0->GPCON & ~GP0CON_CON2_MSK) | GP0CON_CON2_UARTTXD;
@@ -38,34 +42,10 @@ int main()
 //
 	GP0OEN_OEN2_BBA = 1;
 	GP0OEN_OEN1_BBA = 0;
-#if BOARD_TEST
-	pADI_GP0->GPCON = (pADI_GP0->GPCON & ~GP0CON_CON5_MSK) | GP0CON_CON5_GPIOIRQ1;
-	   GP0OCE_OCE5_BBA = 0;
-	   GP0OEN_OEN5_BBA = 1;
-	   GP0SET_SET5_BBA = 1;
-int i = 0;
-    while (i<100)
-    {
-    			i++;
-    			if (i>10) i=0;
-    		    if (i%2)
-    		       {GP0SET_SET5_BBA = 1;}
-    		    else
-    		       {GP0CLR_CLR5_BBA = 1;}
-    }
-#endif
-//    DISUARTCLK
+
 	SerialInit();
 	while (1) {
 	  char ch;
-#if 0
-//	  pADI_UART->COMTX = 0x0;
-	  UrtTx(pADI_UART1, 0x55);
-		uint32_t cnt = 0x50000;
-		while (0 ==(pADI_UART1->COMLSR&1) && cnt) {
-			cnt--;
-		}
-#else
 	  // initial check with timeout to start app
 	  if (!receive(&ch, default_timeout)) {
 		  ch = '\0';
@@ -80,6 +60,5 @@ int i = 0;
 		  SendString(id_packet);
 		  start();
 	  }
-#endif
 	}
 }
