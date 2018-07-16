@@ -97,7 +97,7 @@ struct jumpTable
 	pHandler           handler_1;
 };
 
-#define COMMON_JUMP_TABLE  0x001001
+#define COMMON_JUMP_TABLE  0x001801
 // The vector table.
 #define COMMON_Reset_Handler  (pHandler)(COMMON_JUMP_TABLE + 0x00)                            // The reset handler
 #define COMMON_NMI_Handler  (pHandler)(COMMON_JUMP_TABLE + 0x04)                              // The NMI handler
@@ -256,9 +256,9 @@ struct jumpTable __jmp_table[] = {
 };
 
 #define MAGIC_ID   0xBEA70000 /* Make this record invalid  */
-#define APP_START  0x1000
+#define APP_START  0x1800
 #ifndef APP_END
-#define APP_END 0x0000211f
+#define APP_END 0x000028f7
 #warning Please recompile again with valid APP_END
 #endif
 

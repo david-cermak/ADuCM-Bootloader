@@ -31,5 +31,3 @@ place into 0x1000 app descriptor field
   - jump intructions to real handlers -> so bootloader does not have to delete standard vectors at 0x0
   to avoid unpredictable behaviour if flash not correctly or entirely written
 * normal application code after jump table (after 0x1000...)
-
-## Warning: Sample application still uses older locations (0xE00 for descriptors, 0x1000 for jump table) --> TODO: Update and test!

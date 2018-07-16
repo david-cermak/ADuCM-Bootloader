@@ -32,7 +32,6 @@ void write_to_flash(uint32_t page, uint32_t size)
 			if (g_app_start && g_app_end && address == (uint32_t*)(g_app_end&0xFFFFFFFC)) {
 				// and then let's write app descriptors
 
-//				FeePErs(0x1200);
 				FeePErs(0x1000);
 				while (pADI_FEE->FEESTA  == 1) {}
 				*((uint32_t*)0x100C) = 0xDEADBEEF; // magic id
@@ -69,12 +68,17 @@ void erase_pages(int address, int pages)
 	int i;
 	for (i=0; i<pages; i++)
 	{
+#ifndef __ADUCM360__
 		if ((address & 0x7FF) == 0 )
+#endif
 		{
 			FeePErs(address);
 			while (pADI_FEE->FEESTA  == 1) {}
-//			address += 512;
+#ifdef __ADUCM360__
+			address += 512;
+#else
 			address += 2048;
+#endif
 		}
 	}
 }

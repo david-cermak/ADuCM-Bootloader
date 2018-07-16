@@ -89,7 +89,7 @@ timer_tick (void)
 	}
 	else
 	{
-		UrtTx(pADI_UART, '\n');
+		UrtTx(pADI_UART, '\n\r');
 		timer_delayCount = TIMER_FREQUENCY_HZ;
 	}
 }
@@ -108,7 +108,7 @@ int
 main()
 {
 	  DioCfg(pADI_GP0, 0x003C);
-	  UrtCfg(pADI_UART, B9600, 3, 0);
+	  UrtCfg(pADI_UART, B115200, 3, 0);
 	  timer_start ();
 
   // Infinite loop
